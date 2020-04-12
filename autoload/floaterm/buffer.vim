@@ -10,10 +10,12 @@ function! floaterm#buffer#create(linelist, opts) abort
   for [name, value] in items(a:opts)
     call nvim_buf_set_option(bufnr, name, value)
   endfor
+  call floaterm#debug#info(bufnr)
   return bufnr
 endfunction
 
 function! floaterm#buffer#update_window_opts(bufnr, window_opts) abort
+  call floaterm#debug#info([a:bufnr, a:window_opts])
   let window_opts = getbufvar(a:bufnr, 'floaterm_window_opts', {})
   for item in items(a:window_opts)
     let window_opts[item[0]] = item[1]

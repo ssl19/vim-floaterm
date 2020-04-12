@@ -16,12 +16,14 @@ let g:floaterm_rootmarkers   = get(g:, 'floaterm_rootmarkers', [])
 let g:floaterm_autoinsert    = get(g:, 'floaterm_autoinsert', v:true)
 let g:floaterm_open_command  = get(g:, 'floaterm_open_command', 'edit')
 let g:floaterm_gitcommit     = get(g:, 'floaterm_gitcommit', v:null)
+let g:floaterm_debug         = get(g:, 'floaterm_debug', v:false)
 
 let g:floaterm_keymap_new    = get(g:, 'floaterm_keymap_new', v:null)
 let g:floaterm_keymap_prev   = get(g:, 'floaterm_keymap_prev', v:null)
 let g:floaterm_keymap_next   = get(g:, 'floaterm_keymap_next', v:null)
 let g:floaterm_keymap_toggle = get(g:, 'floaterm_keymap_toggle', v:null)
 
+command! -nargs=0           FloatermInfo   call floaterm#debug#open_log()
 command! -nargs=0           FloatermPrev   call floaterm#prev()
 command! -nargs=0           FloatermNext   call floaterm#next()
 command! -nargs=* -complete=customlist,floaterm#cmdline#complete

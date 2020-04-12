@@ -16,6 +16,7 @@ else
 endif
 
 function! s:on_floaterm_open(bufnr) abort
+  call floaterm#debug#info(a:bufnr)
   call setbufvar(a:bufnr, '&buflisted', 0)
   call setbufvar(a:bufnr, '&filetype', 'floaterm')
   if has('nvim')
@@ -33,6 +34,7 @@ function! s:on_floaterm_open(bufnr) abort
 endfunction
 
 function! s:on_floaterm_close(bufnr) abort
+  call floaterm#debug#info(a:bufnr)
   if getbufvar(a:bufnr, '&filetype') != 'floaterm'
     return
   endif
@@ -43,6 +45,7 @@ function! s:on_floaterm_close(bufnr) abort
 endfunction
 
 function! floaterm#terminal#open(bufnr, cmd, opts, window_opts) abort
+  call floaterm#debug#info([a:bufnr, a:cmd, a:opts, a:window_opts])
   let width = g:floaterm_width == v:null ? 0.6 : g:floaterm_width
   let width = get(a:window_opts, 'width', width)
   if type(width) == v:t_float | let width = width * &columns | endif
@@ -107,11 +110,13 @@ function! floaterm#terminal#open(bufnr, cmd, opts, window_opts) abort
 endfunction
 
 function! floaterm#terminal#open_existing(bufnr) abort
+  call floaterm#debug#info(a:bufnr)
   let window_opts = getbufvar(a:bufnr, 'floaterm_window_opts', {})
   call floaterm#terminal#open(a:bufnr, '', {}, window_opts)
 endfunction
 
 function! floaterm#terminal#send(bufnr, cmds) abort
+  call floaterm#debug#info([a:bufnr, a:cmds])
   let ch = get(s:channel_map, a:bufnr, v:null)
   if empty(ch) | return | endif
   if has('nvim')

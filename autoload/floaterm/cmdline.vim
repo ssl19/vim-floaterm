@@ -5,6 +5,7 @@
 " ============================================================================
 
 function! floaterm#cmdline#parse_new(arglist) abort
+  call floaterm#debug#info(a:arglist)
   let window_opts = {}
   let cmd = ''
   if a:arglist != []
@@ -24,6 +25,7 @@ function! floaterm#cmdline#parse_new(arglist) abort
       let c += 1
     endfor
   endif
+  call floaterm#debug#info([cmd, window_opts])
   return [cmd, window_opts]
 endfunction
 

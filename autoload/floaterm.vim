@@ -43,6 +43,8 @@ endif
 " Main functions
 " ----------------------------------------------------------------------------
 function! floaterm#new(...) abort
+  call floaterm#debug#info(a:000)
+
   if !empty(g:floaterm_rootmarkers)
     let dest = floaterm#resolver#get_root()
     if dest !=# ''
@@ -75,6 +77,7 @@ function! floaterm#new(...) abort
 endfunction
 
 function! floaterm#toggle(...)  abort
+  call floaterm#debug#info(a:000)
   let termname = get(a:, 1, '')
   if termname != ''
     let bufnr = floaterm#terminal#get_bufnr(termname)
@@ -106,6 +109,7 @@ function! floaterm#toggle(...)  abort
 endfunction
 
 function! floaterm#update(...) abort
+  call floaterm#debug#info(a:000)
   if &filetype !=# 'floaterm'
     call floaterm#util#show_msg('You have to be in a floaterm window to change window opts.', 'error')
     return
@@ -126,6 +130,7 @@ function! floaterm#update(...) abort
 endfunction
 
 function! floaterm#next()  abort
+  call floaterm#debug#info()
   call floaterm#hide()
   let next_bufnr = floaterm#buflist#find_next()
   if next_bufnr == -1
@@ -134,9 +139,11 @@ function! floaterm#next()  abort
   else
     call floaterm#terminal#open_existing(next_bufnr)
   endif
+  return next_bufnr
 endfunction
 
 function! floaterm#prev()  abort
+  call floaterm#debug#info()
   call floaterm#hide()
   let prev_bufnr = floaterm#buflist#find_prev()
   if prev_bufnr == -1
@@ -145,9 +152,11 @@ function! floaterm#prev()  abort
   else
     call floaterm#terminal#open_existing(prev_bufnr)
   endif
+  return prev_bufnr
 endfunction
 
 function! floaterm#curr() abort
+  call floaterm#debug#info()
   let curr_bufnr = floaterm#buflist#find_curr()
   if curr_bufnr == -1
     let curr_bufnr = floaterm#new()
@@ -159,6 +168,7 @@ endfunction
 
 " Hide current before opening another terminal window
 function! floaterm#hide() abort
+  call floaterm#debug#info()
   while v:true
     let found_winnr = floaterm#window#find_floaterm_winnr()
     if found_winnr > 0
@@ -170,6 +180,7 @@ function! floaterm#hide() abort
 endfunction
 
 function! floaterm#send(bang, startlnum, endlnum, ...) abort
+  call floaterm#debug#info()
   if &filetype ==# 'floaterm'
     let msg = "FloatermSend can't be used in the floaterm window"
     call floaterm#util#show_msg(msg, 'warning')

@@ -117,6 +117,10 @@ Typically this command is executed with a range. i.e., `:'<,'>FloatermSend`, if 
 
 Also you may try `:FloatermSend!` and `:'<,'>FloatermSend!`, the former trims the whitespace in the begin of the line, and the latter removes the whitespace but still keeps the indent.
 
+#### `:FloatermInfo`
+
+Open debug info. You need to set `g:floaterm_debug` to `v:true` first.
+
 ### Global variables
 
 #### **`g:floaterm_wintype`**
@@ -171,6 +175,12 @@ Type `string`. Opening strategy for running `git commit` in floaterm window.
 Available: `'floaterm'`(open `gitcommit` file in the floaterm window), `'split'`, `'vsplit'`, `'tabe'`.
 
 Default: `v:null` which means this is disabled by default(use your own `$GIT_EDITOR`).
+
+#### **`g:floaterm_debug`**
+
+Type `bool`. Run floaterm in debug mode
+
+Default: `v:false`
 
 ### Keymaps
 

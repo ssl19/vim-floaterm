@@ -163,6 +163,8 @@ endfunction
 function! floaterm#buflist#add(bufnr) abort
   let node = s:node.new(a:bufnr)
   call s:buflist.insert(node)
+  let buffers = s:buflist.to_string()
+  call floaterm#debug#info(buffers)
 endfunction
 function! floaterm#buflist#find_next() abort
   return s:buflist.find_next()

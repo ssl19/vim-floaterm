@@ -6,6 +6,7 @@
 
 " winid: floaterm window id
 function! s:add_border(winid) abort
+  call floaterm#debug#info(a:winid)
   let win_opts = nvim_win_get_config(a:winid)
   let top = g:floaterm_borderchars[4] .
           \ repeat(g:floaterm_borderchars[0], win_opts.width) .
@@ -37,6 +38,7 @@ function! s:add_border(winid) abort
   let win_opts.focusable = v:false
   let border_winid = nvim_open_win(border_bufnr, v:false, win_opts)
   call nvim_win_set_option(border_winid, 'winhl', 'NormalFloat:FloatermBorderNF')
+  call floaterm#debug#info(border_winid)
   return border_winid
 endfunction
 
@@ -103,6 +105,7 @@ function! s:floatwin_pos(width, height, pos) abort
 endfunction
 
 function! floaterm#window#nvim_open_win(bufnr, width, height, pos) abort
+  call floaterm#debug#info([a:bufnr, a:width, a:height, a:pos])
   let [row, col, anchor] = s:floatwin_pos(a:width, a:height, a:pos)
   let opts = {
     \ 'relative': 'editor',
@@ -128,6 +131,7 @@ function! s:winexists(winid) abort
 endfunction
 
 function! floaterm#window#hide_border(bufnr, ...) abort
+  call floaterm#debug#info(a:bufnr)
   let winid = getbufvar(a:bufnr, 'floaterm_border_winid', v:null)
   if winid != v:null && s:winexists(winid)
     call nvim_win_close(winid, v:true)
@@ -148,6 +152,7 @@ function! floaterm#window#find_floaterm_winnr() abort
 endfunction
 
 function! floaterm#window#open_split(height, width, pos) abort
+  call floaterm#debug#info([a:height, a:width, a:pos])
   if a:pos == 'top'
     execute 'topleft' . a:height . 'split'
   elseif a:pos == 'left'

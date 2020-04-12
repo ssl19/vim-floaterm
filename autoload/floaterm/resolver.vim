@@ -139,6 +139,7 @@ function! floaterm#resolver#get_root() abort
 endfunction
 
 function! floaterm#resolver#chdir(path) abort
+  call floaterm#debug#info(a:path)
   if has('nvim')
     let cmd = haslocaldir()? 'lcd' : (haslocaldir(-1, 0)? 'tcd' : 'cd')
   else
