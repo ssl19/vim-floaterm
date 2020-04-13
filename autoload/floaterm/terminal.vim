@@ -28,7 +28,11 @@ function! s:on_floaterm_open(bufnr) abort
         augroup END
     endif
     if g:floaterm_autoinsert == v:true
-        startinsert
+        if has('nvim')
+            startinsert
+        else
+            silent! exec  "normal i"
+        endif
     endif
 endfunction
 
