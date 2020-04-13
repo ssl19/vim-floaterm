@@ -131,9 +131,9 @@ function! s:winexists(winid) abort
 endfunction
 
 function! floaterm#window#hide_border(bufnr, ...) abort
-  call floaterm#debug#info(a:bufnr)
   let winid = getbufvar(a:bufnr, 'floaterm_border_winid', v:null)
   if winid != v:null && s:winexists(winid)
+    call floaterm#debug#info(a:bufnr, winid)
     call nvim_win_close(winid, v:true)
   endif
   call setbufvar(a:bufnr, 'floaterm_border_winid', v:null)

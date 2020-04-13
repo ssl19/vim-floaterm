@@ -34,13 +34,14 @@ function! s:on_floaterm_open(bufnr) abort
 endfunction
 
 function! s:on_floaterm_close(bufnr) abort
-  call floaterm#debug#info(a:bufnr)
   if getbufvar(a:bufnr, '&filetype') != 'floaterm'
+    call floaterm#debug#info(getbufvar(a:bufnr, '&filetype'))
     return
   endif
+  call floaterm#debug#info(a:bufnr)
   " NOTE: MUST hide border BEFORE deleting floaterm buffer
   call floaterm#window#hide_border(a:bufnr)
-  bdelete!
+  execute a:bufnr . 'bdelete!'
   doautocmd BufDelete   " call lightline#update()
 endfunction
 
