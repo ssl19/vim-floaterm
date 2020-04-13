@@ -5,6 +5,14 @@
 " ============================================================================
 
 " ----------------------------------------------------------------------------
+if g:floaterm_wintype != v:null
+  let s:wintype_new = g:floaterm_wintype
+elseif has('nvim') && exists('*nvim_win_set_config')
+  let s:wintype_new= 'floating'
+else
+  let s:wintype_new = 'normal'
+endif
+
 let $VIM_SERVERNAME = v:servername
 let $VIM_EXE = v:progpath
 
@@ -75,34 +83,38 @@ function! floaterm#new(...) abort
 endfunction
 
 function! floaterm#toggle(...)  abort
-  let termname = get(a:, 1, '')
-  if termname != ''
-    let bufnr = floaterm#terminal#get_bufnr(termname)
-    if bufnr == -1
-      call floaterm#util#show_msg('No floaterm found with name: ' . termname, 'error')
-      return
-    elseif bufnr == bufnr()
-      hide
-    elseif bufwinnr(bufnr) > -1
-      execute bufwinnr(bufnr) . 'wincmd w'
+    let termname = get(a:, 1, '')
+    if termname != ''
+        let bufnr = floaterm#terminal#get_bufnr(termname)
+        if bufnr == -1
+            call floaterm#util#show_msg('No floaterm found with name: ' . termname, 'error')
+            return
+        elseif bufnr == bufnr()
+            hide
+        elseif bufwinnr(bufnr) > -1
+            execute bufwinnr(bufnr) . 'wincmd w'
+        else
+            call floaterm#terminal#open_existing(bufnr)
+        endif
+    elseif &filetype == 'floaterm'
+        if !has('nvim') && s:wintype_new ==# 'floating'
+        call popup_close(win_getid())
     else
-      call floaterm#terminal#open_existing(bufnr)
+        hide
     endif
-  elseif &filetype == 'floaterm'
-    hide
-  else
-    let found_winnr = floaterm#window#find_floaterm_winnr()
-    if found_winnr > 0
-      execute found_winnr . 'wincmd w'
-      if has('nvim')
-        startinsert
-      elseif mode() ==# 'n'
-        normal! i
-      endif
     else
-      call floaterm#curr()
+        let found_winnr = floaterm#window#find_floaterm_winnr()
+        if found_winnr > 0
+            execute found_winnr . 'wincmd w'
+            if has('nvim')
+                startinsert
+            elseif mode() ==# 'n'
+                normal! i
+            endif
+        else
+            call floaterm#curr()
+        endif
     endif
-  endif
 endfunction
 
 function! floaterm#update(...) abort
@@ -162,7 +174,11 @@ function! floaterm#hide() abort
   while v:true
     let found_winnr = floaterm#window#find_floaterm_winnr()
     if found_winnr > 0
-      execute found_winnr . 'hide'
+        if !has('nvim') && s:wintype_new ==# 'float'
+            call popup_close(found_winnr)
+        else
+            execute found_winnr . 'hide'
+        endif
     else
       break
     endif
