@@ -27,13 +27,7 @@ function! s:on_floaterm_open(bufnr) abort
             execute 'autocmd! BufHidden <buffer=' . a:bufnr . '> call floaterm#window#hide_border(' . a:bufnr . ')'
         augroup END
     endif
-    if g:floaterm_autoinsert == v:true
-        if has('nvim')
-            startinsert
-        else
-            silent! exec  "normal i"
-        endif
-    endif
+    call floaterm#util#startinsert()
 endfunction
 
 function! s:on_floaterm_close(bufnr) abort
@@ -47,33 +41,34 @@ function! s:on_floaterm_close(bufnr) abort
 endfunction
 
 function! floaterm#terminal#open(bufnr, cmd, opts, window_opts) abort
-    if !has('nvim') && s:wintype ==# 'floating'
-        let width =  g:floaterm_width
-
-        let height = g:floaterm_height
-        if type(width) == v:t_float
-            let width = float2nr(width * &columns)
-        endif
-        if type(height) == v:t_float
-            let height = float2nr(height * &lines)
-        endif
+    if type(g:floaterm_width) == 7
+        let width = 0.6
     else
-        let width = g:floaterm_width == v:null ? 0.6 : g:floaterm_width
-        let width = get(a:window_opts, 'width', width)
-        if type(width) == v:t_float | let width = width * &columns | endif
-        let width = float2nr(width)
-
-        let height = g:floaterm_height == v:null ? 0.6 : g:floaterm_height
-        let height = get(a:window_opts, 'height', height)
-        if type(height) == v:t_float | let height = height * &lines | endif
-        let height = float2nr(height)
+        let width = g:floaterm_width
     endif
+    let width = get(a:window_opts, 'width', width)
+    if type(width) == v:t_float
+        let width = width * &columns
+         endif
+    let width = float2nr(width)
+
+    "let height = get(g:, 'floaterm_height', 0.6)
+    if type(g:floaterm_height) == 7
+        let height = 0.6
+    else
+        let height = g:floaterm_height
+    endif
+    let height = get(a:window_opts, 'height', height)
+    if type(height) == v:t_float
+        let height = height * &lines
+    endif
+    let height = float2nr(height)
 
     let wintype = get(a:window_opts, 'wintype', s:wintype)
     let pos = get(a:window_opts, 'position', g:floaterm_position)
 
     if a:bufnr > 0
-        if s:wintype ==# 'floating'
+        if wintype ==# 'floating'
             call floaterm#window#nvim_open_win(a:bufnr, width, height, pos)
         else
             call floaterm#window#open_split(height, width, pos)
@@ -83,7 +78,7 @@ function! floaterm#terminal#open(bufnr, cmd, opts, window_opts) abort
         return 0
     endif
 
-    if s:wintype ==# 'floating'
+    if wintype ==# 'floating'
         if has('nvim')
             let bufnr = nvim_create_buf(v:false, v:true)
             call floaterm#window#nvim_open_win(bufnr, width, height, pos)

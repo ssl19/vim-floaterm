@@ -190,7 +190,6 @@ function! floaterm#window#nvim_open_win(bufnr, width, height, pos) abort
                     \ 'highlight': 'Terminal'
                     \ }
         let winid = popup_create(a:bufnr, opts)
-        call setbufvar(winbufnr(winid), '&filetype', 'floaterm')
     endif
     return winid 
 endfunction

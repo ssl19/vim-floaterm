@@ -38,7 +38,7 @@ function! s:fff_callback(...) abort
   endif
 
   if filereadable(file_data[0])
-    call floaterm#hide()
+    call floaterm#util#hide_buffer()
     execute g:floaterm_open_command . ' ' . file_data[0]
   endif
 endfunction

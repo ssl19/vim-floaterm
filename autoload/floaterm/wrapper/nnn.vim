@@ -25,7 +25,7 @@ function! s:nnn_callback(...) abort
   if filereadable(s:nnn_tmpfile)
     let filenames = readfile(s:nnn_tmpfile)
     if !empty(filenames)
-      call floaterm#hide()
+      call floaterm#util#hide_buffer()
       for filename in filenames
         execute g:floaterm_open_command . ' ' . fnameescape(filename)
       endfor
