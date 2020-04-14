@@ -62,8 +62,7 @@ endfunction
 
 
 " Hide current before opening another terminal window
-function! floaterm#util#hide_buffer(...) abort
-    let argv_1 = a:000
+function! floaterm#util#hide_buffer() abort
 let window_opts = getbufvar(bufnr('%'), 'floaterm_window_opts', {}) 
     if !has('nvim') && get(window_opts, 'wintype', '') == 'floating' 
         call popup_close(win_getid())

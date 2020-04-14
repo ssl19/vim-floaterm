@@ -97,7 +97,7 @@ function! floaterm#toggle(...)  abort
             call floaterm#terminal#open_existing(bufnr)
         endif
     elseif &filetype == 'floaterm'
-            call floaterm#util#hide_buffer(bufnr('%'))
+            call floaterm#util#hide_buffer()
     else
         let found_winnr = floaterm#window#find_floaterm_winnr()
         if found_winnr > 0
@@ -125,7 +125,7 @@ function! floaterm#update(...) abort
     endif
 
     "hide
-    call floaterm#util#hide_buffer(bufnr)
+    call floaterm#util#hide_buffer()
     call floaterm#buffer#update_window_opts(bufnr, window_opts)
     call floaterm#terminal#open_existing(bufnr)
 endfunction
